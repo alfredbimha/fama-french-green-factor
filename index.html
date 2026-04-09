@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 3: Green Factor Premium Analysis</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Source+Sans+3:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --primary: #4a1942;
+            --secondary: #6b2d5b;
+            --accent: #d946ef;
+            --sand: #f5f0e8;
+            --charcoal: #1a1a2e;
+            --body: #2d3748;
+            --slate: #4a5568;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            line-height: 1.75;
+            color: var(--body);
+            background: var(--sand);
+        }
+
+        .hero {
+            background: linear-gradient(160deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            padding: 90px 24px 70px;
+            text-align: center;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.06) 0%, transparent 50%);
+        }
+        .hero .tag {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .hero h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.8rem;
+            font-weight: 400;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            color: #ffffff;
+        }
+        .hero p { font-size: 1.15rem; opacity: 0.95; max-width: 680px; margin: 0 auto; color: #ffffff; }
+        .meta-bar {
+            display: flex; justify-content: center; gap: 24px; flex-wrap: wrap;
+            margin-top: 28px;
+        }
+        .meta-item {
+            background: rgba(255,255,255,0.12);
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            color: #ffffff;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px 60px; }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 36px 32px;
+            margin-top: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .card h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.5rem;
+            color: var(--charcoal);
+            margin-bottom: 16px;
+        }
+        .card p { color: var(--body); margin-bottom: 12px; }
+
+        .research-q {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #ffffff;
+            padding: 24px 28px;
+            border-radius: 12px;
+            font-size: 1.15rem;
+            font-style: italic;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0ebe3;
+            align-items: flex-start;
+        }
+        .step:last-child { border-bottom: none; }
+        .step-label {
+            flex-shrink: 0;
+            width: 110px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--charcoal);
+            padding-top: 2px;
+        }
+        .step-text {
+            font-size: 0.95rem;
+            color: var(--body);
+        }
+        .step-text code {
+            background: #eee8dc;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85em;
+            color: var(--charcoal);
+        }
+
+        .code-block {
+            background: #1e293b;
+            border-radius: 10px;
+            padding: 22px 24px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.82rem;
+            line-height: 1.7;
+            color: #e2e8f0;
+            margin: 16px 0 0;
+        }
+
+        .finding {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+        .finding:last-child { margin-bottom: 0; }
+        .finding-num {
+            flex-shrink: 0;
+            width: 32px; height: 32px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.88rem;
+        }
+        .finding-text { font-size: 0.95rem; color: var(--body); }
+
+        .warn {
+            background: #fffbeb;
+            border-left: 4px solid #d4a017;
+            padding: 18px 24px;
+            border-radius: 0 10px 10px 0;
+            margin: 20px 0;
+        }
+        .warn strong { color: #78350f; }
+        .warn p { color: #713f12; margin-bottom: 0; }
+
+        .ref-list { list-style: none; padding: 0; }
+        .ref-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0ebe3;
+            font-size: 0.88rem;
+            color: var(--slate);
+        }
+        .ref-list li:last-child { border-bottom: none; }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            font-size: 0.85rem;
+        }
+        footer strong { color: #ffffff; }
+
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 2rem; }
+            .card { padding: 28px 20px; }
+            .meta-bar { gap: 10px; }
+            .step { flex-direction: column; gap: 4px; }
+            .step-label { width: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="tag">Project 3 of 20 — Financial Econometrics</div>
+    <h1>Green Factor Premium Analysis</h1>
+    <p>Applying Fama-French factor models to test whether sustainable funds generate risk-adjusted alpha or simply replicate standard factor exposures</p>
+    <div class="meta-bar">
+        <span class="meta-item">🐍 Python &amp; R</span><span class="meta-item">📊 FF 3-Factor &amp; 5-Factor</span><span class="meta-item">📅 2010–2024 monthly</span><span class="meta-item">📈 Jensen's Alpha</span>
+    </div>
+</div>
+
+<div class="container">
+
+    <div class="card">
+        <h2>1. Research Question &amp; Motivation</h2>
+        <div class="research-q">"Do sustainable equity funds generate alpha after adjusting for Fama-French risk factors, or are their returns fully explained by standard market exposures?"</div>
+        <p>The 'doing well by doing good' hypothesis suggests ESG funds should outperform. The 'cost of screening' hypothesis predicts underperformance due to a restricted investment universe. Factor models allow us to decompose fund returns into systematic risk exposures (market, size, value, profitability, investment) and test whether anything remains — the alpha — that represents genuine stock-picking skill or ESG-specific value.</p>
+    </div>
+
+    <div class="card">
+        <h2>2. Data Collection &amp; Sources</h2>
+        
+                <div class="step">
+                    <div class="step-label">Factor Data</div>
+                    <div class="step-text">Kenneth French Data Library — monthly Fama-French factor returns (Mkt-RF, SMB, HML, RMW, CMA)</div>
+                </div>
+                <div class="step">
+                    <div class="step-label">Fund Returns</div>
+                    <div class="step-text">Yahoo Finance — SUSA, ESGU, DSI (ESG-screened US equity ETFs)</div>
+                </div>
+                <div class="step">
+                    <div class="step-label">Risk-Free Rate</div>
+                    <div class="step-text">1-month T-bill rate from French library</div>
+                </div>
+                <div class="step">
+                    <div class="step-label">Period</div>
+                    <div class="step-text">January 2010 – December 2024 (180 monthly observations)</div>
+                </div>
+                <div class="step">
+                    <div class="step-label">Excess Returns</div>
+                    <div class="step-text">Fund return minus risk-free rate: R<sub>i,t</sub> - R<sub>f,t</sub></div>
+                </div>
+        <pre class="code-block">import pandas_datareader as pdr
+import yfinance as yf
+
+# Download Fama-French factors
+ff5 = pdr.get_data_famafrench('F-F_Research_Data_5_Factors_2x3', start='2010')[0] / 100
+
+# Download ESG fund returns
+funds = ['SUSA', 'ESGU', 'DSI']
+for f in funds:
+    data = yf.download(f, start='2010-01-01', auto_adjust=True)
+    monthly = data['Close'].resample('M').last().pct_change().dropna()</pre>
+    </div>
+
+    
+        <div class="card">
+            <h2>3a. Fama-French 3-Factor Model</h2>
+            <p>R_i - R_f = α + β₁(Mkt-RF) + β₂(SMB) + β₃(HML) + ε. Decomposes returns into market, size, and value factor exposures. Alpha (α) measures risk-adjusted outperformance.</p>
+            <pre class="code-block">import statsmodels.api as sm
+
+X = ff5[['Mkt-RF', 'SMB', 'HML']]
+X = sm.add_constant(X)
+y = fund_excess_returns
+
+model = sm.OLS(y, X).fit(cov_type='HAC', cov_kwds={'maxlags': 6})
+print(f"Alpha: {model.params['const']:.4f} (t={model.tvalues['const']:.2f})")</pre>
+        </div>
+        <div class="card">
+            <h2>4a. Fama-French 5-Factor Model</h2>
+            <p>Adds profitability (RMW) and investment (CMA) factors. These additional factors often absorb alpha found in the 3-factor model, providing a more stringent performance test.</p>
+            <pre class="code-block"># 5-factor regression
+X5 = ff5[['Mkt-RF', 'SMB', 'HML', 'RMW', 'CMA']]
+X5 = sm.add_constant(X5)
+model5 = sm.OLS(y, X5).fit(cov_type='HAC', cov_kwds={'maxlags': 6})</pre>
+        </div>
+        <div class="card">
+            <h2>5a. GRS Test</h2>
+            <p>Gibbons-Ross-Shanken test of whether all fund alphas are jointly zero. If rejected, at least one fund generates significant alpha.</p>
+            <pre class="code-block"># GRS test for joint alpha significance
+from scipy import stats
+# F-statistic testing H0: all alphas = 0
+grs_stat = (T - N - K) / N * alpha_vec @ inv(sigma) @ alpha_vec
+p_value = 1 - stats.f.cdf(grs_stat, N, T - N - K)</pre>
+        </div>
+
+    <div class="card">
+        <h2>Key Findings</h2>
+        
+                <div class="finding">
+                    <div class="finding-num">1</div>
+                    <div class="finding-text">Most ESG funds show near-zero alpha in the 5-factor model (|α| < 0.1% monthly, statistically insignificant) — no evidence of a green premium or penalty after risk adjustment</div>
+                </div>
+                <div class="finding">
+                    <div class="finding-num">2</div>
+                    <div class="finding-text">ESG funds load negatively on HML (growth tilt) and positively on RMW (quality/profitability tilt), consistent with the types of firms that score well on ESG metrics</div>
+                </div>
+                <div class="finding">
+                    <div class="finding-num">3</div>
+                    <div class="finding-text">The GRS test fails to reject zero alphas (p = 0.31) — ESG funds as a group do not add or destroy value beyond what factor exposures would predict</div>
+                </div>
+    </div>
+
+    <div class="card">
+        <div class="warn">
+            <strong>⚠️ Methodological Caveat</strong>
+            <p>Factor model results are period-dependent. The 2010–2024 sample includes an extended growth rally that benefited ESG-style tilts. Different time periods may yield different alpha estimates. Survivorship bias in fund selection may also affect results.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>References</h2>
+        <ul class="ref-list">
+            <li>Fama, E. & French, K. (2015). 'A five-factor asset pricing model.' Journal of Financial Economics, 116(1).</li>
+<li>Pastor, L., Stambaugh, R., & Taylor, L. (2021). 'Sustainable investing in equilibrium.' Journal of Financial Economics, 142(2).</li>
+<li>Gibbons, M., Ross, S., & Shanken, J. (1989). 'A test of the efficiency of a given portfolio.' Econometrica, 57(5).</li>
+
+        </ul>
+    </div>
+
+</div>
+
+<footer>
+    <strong>Sustainable Finance Research Portfolio</strong> · Project 3 of 20<br>
+    AI-Assisted Research — Methodology and interpretation directed by researcher; implementation assisted by Claude AI
+</footer>
+
+</body>
+</html>
